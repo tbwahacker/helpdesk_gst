@@ -1,91 +1,67 @@
-{% block content %}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Register form</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f2f2f2;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
 
-<div class="mdc-layout-grid__cell stretch-card mdc-layout-grid__cell--span-12">
-    <div class="mdc-card p-4">
-        <div class="d-flex justify-content-between align-items-center">
-            <h1 class="card-title mb-0">Tehama Karibu Yako</h1>
-            <a href="#" class="btn btn-primary">+ New Ticket</a>
-        </div>
-    </div>
+        .container {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            width: 700px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        }
+
+        input {
+            width: 100%;
+            padding: 10px;
+            margin: 8px 0;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+
+        button {
+            width: 100%;
+            padding: 10px;
+            background-color: #172e69;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #218838;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h2>Registration form</h2>
+    <form action="#" method="POST">
+
+        <input type="text" name="fullname" placeholder="Full Name" required>
+
+        <input type="email" name="email" placeholder="Email Address" required>
+
+        <input type="password" name="password" placeholder="Password" required>
+
+        <input type="password" name="confirm_password" placeholder="Confirm Password" required>
+
+        <button type="submit">Register</button>
+
+    </form>
 </div>
 
-<hr>
-
-<!-- Welcome Section -->
-<div class="mdc-layout-grid__inner">
-
-    <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-12">
-        <div class="mdc-card p-4 text-center">
-            <h3>Welcome to Helpdesk System </h3>
-            <p>Manage your support tickets easily and get quick assistance.</p>
-        </div>
-    </div>
-
-    <!-- Stats Cards -->
-    <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-4">
-        <div class="mdc-card p-3 text-center">
-            <h4> Total Tickets</h4>
-            <h2>12</h2>
-        </div>
-    </div>
-
-    <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-4">
-        <div class="mdc-card p-3 text-center">
-            <h4>In Progress</h4>
-            <h2>5</h2>
-        </div>
-    </div>
-
-    <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-4">
-        <div class="mdc-card p-3 text-center">
-            <h4>Resolved</h4>
-            <h2>7</h2>
-        </div>
-    </div>
-
-</div>
-
-<hr>
-
-<!-- Recent Tickets Table -->
-<div class="mdc-layout-grid__cell stretch-card mdc-layout-grid__cell--span-12">
-    <div class="mdc-card p-4">
-        <h4 class="card-title">Recent Tickets</h4>
-
-        <table class="table">
-            <thead>
-                <tr>
-                    <th>Title</th>
-                    <th>Status</th>
-                    <th>Priority</th>
-                    <th>Date</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <td>Login Issue</td>
-                    <td>Open</td>
-                    <td>High</td>
-                    <td>2026-04-10</td>
-                </tr>
-
-                <tr>
-                    <td>System Bug</td>
-                    <td>In Progress</td>
-                    <td>Medium</td>
-                    <td>2026-04-09</td>
-                </tr>
-
-                <tr>
-                    <td>Password Reset</td>
-                    <td>Resolved</td>
-                    <td>Low</td>
-                    <td>2026-04-08</td>
-                </tr>
-            </tbody>
-        </table>
-    </div>
-</div>
-
-{% endblock content %}
-```
+</body>
+</html>
