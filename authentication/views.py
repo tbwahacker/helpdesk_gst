@@ -4,7 +4,7 @@ def login(request):
     return render(request, 'authentication/login.html')
 
 def signup(request):
-    return render(request, 'authentication/login.html')
+    return render(request, 'authentication/signup.html')
 
 def logout(request):
     return
