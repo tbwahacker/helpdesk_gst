@@ -31,3 +31,5 @@ build/
 *.mo
 dist/
 build/
+__pycache__/
+__pycache__/*
