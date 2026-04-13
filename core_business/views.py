@@ -4,4 +4,4 @@ def index(request):
     return render(request, 'index.html')
 
 def ticket(request):
-    return render(request, 'ticket.html')
+    return render(request, 'core_business/ticket.html')
