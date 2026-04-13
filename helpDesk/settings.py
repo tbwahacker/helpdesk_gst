@@ -39,7 +39,8 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'bootstrap5',
     'authentication',
-    'test'
+    'test',
+    'core_business',
 ]
 
 MIDDLEWARE = [
