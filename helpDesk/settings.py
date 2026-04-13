@@ -37,7 +37,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'bootstrap5',
+    'django_bootstrap5',
     'authentication',
     'test',
     'core_business',
@@ -54,6 +54,10 @@ MIDDLEWARE = [
 ]
 
 ROOT_URLCONF = 'helpDesk.urls'
+
+DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+LOGIN_REDIRECT_URL = '/'
+LOGIN_URL = '/login'
 
 TEMPLATES = [
     {
