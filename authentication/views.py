@@ -1,11 +1,11 @@
 # authentication/views.py
-from django.contrib.auth.models import User
 from django.shortcuts import render, redirect
-from django.contrib.auth import logout as auth_logout, authenticate, login
+from django.contrib.auth import logout as auth_logout, authenticate, login, get_user_model
 from django.contrib.auth.forms import AuthenticationForm
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 
+User=get_user_model()
 
 def login_view(request):  # renamed from 'login' to avoid conflict
     if request.method == 'POST':
