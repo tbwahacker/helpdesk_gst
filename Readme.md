@@ -28,4 +28,4 @@ git push origin ur branch
 git pull origin ur branch
 
 # how to migrate
-py managr.py makemigrations
+py manage.py makemigrations
