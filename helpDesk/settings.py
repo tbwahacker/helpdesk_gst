@@ -39,9 +39,9 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'django_bootstrap5',
     'authentication',
-    'test',
     'core_business',
 ]
+AUTH_USER_MODEL = 'core_business.User'
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
