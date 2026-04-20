@@ -14,7 +14,8 @@ class User(AbstractUser):
 
     role = models.CharField(max_length=10, choices=ROLE_CHOICES,  default='user')
     phone = models.CharField(max_length=15, blank=True, null=True)
-
+    is_verified = models.BooleanField(default=False)
+    is_rejected = models.BooleanField(default=False)
     def __str__(self):
         return self.username
 
@@ -125,3 +126,4 @@ class KnowledgeBase(models.Model):
 
     def __str__(self):
         return self.title
+
