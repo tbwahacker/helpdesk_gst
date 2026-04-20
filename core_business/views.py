@@ -13,4 +13,5 @@ def account_view(request):
     context = {
         'user': request.user,
     }
+
     return render(request, 'account.html', context)
