@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+{% if messages %}
+    {% for message in messages %}
+        <p style="color:green;">{{ message }}</p>
+    {% endfor %}
+{% endif %}
+
+<h2>Users Pending Approval</h2>
+
+{% for user in users %}
+    <p>
+        {{ user.username }} ({{ user.role }})
+        <a href="/auth/approve-user/{{ user.id }}/">Approve</a>
+     <!-- ❌ Reject button -->
+        <a href="/auth/reject-user/{{ user.id }}/" style="color:red;">Reject</a>
+    </p>
+{% empty %}
+    <p>No users pending approval</p>
+{% endfor %}
+</body>
+</html>
