@@ -73,9 +73,6 @@ def signup(request):
                 first_name=first_name,
                 last_name=last_name
             )
-
-            # ✅ VERY IMPORTANT LINE
-
             user.save()
 
             login(request, user)
