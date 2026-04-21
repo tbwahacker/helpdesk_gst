@@ -3,51 +3,21 @@ from django.shortcuts import render, redirect
 from django.contrib.auth import logout as auth_logout, authenticate, login, get_user_model
 from django.contrib.auth.forms import AuthenticationForm
 from django.contrib import messages
-from .decorators import role_required
+from authentication.decorators import admin_required, staff_required
 from django.contrib.auth.decorators import login_required
 
+
 @login_required
-@role_required(['admin'])
-def reject_user(request, user_id):
-    user = User.objects.get(id=user_id)
-
-    # delete user (simple approach)
-    user.delete()
-
-    messages.success(request, "User rejected successfully")
-
-    return redirect('verify_users')
-@login_required
-@role_required(['admin'])
+@admin_required
 def admin_dashboard(request):
     return render(request, 'admin/dashboard.html')
 
 @login_required
-@role_required(['admin'])
-def verify_users(request):
-    users = User.objects.filter(is_verified=False)
-    return render(request, 'admin/verify_users.html', {'users': users})
-
-
-@login_required
-@role_required(['admin'])
-def approve_user(request, user_id):
-    user = User.objects.get(id=user_id)
-    user.is_verified = True
-    user.save()
-    user.is_rejected = True
-    user.save()
-    return redirect('verify_users')
-
-
-@login_required
-@role_required(['staff'])
+@staff_required
 def staff_dashboard(request):
     return render(request, 'staff/dashboard.html')
 
-
 @login_required
-@role_required(['user'])
 def user_dashboard(request):
     return render(request, 'user/dashboard.html')
 
@@ -61,9 +31,6 @@ def login_view(request):
         user = authenticate(username=username, password=password)
 
         if user:
-            if not user.is_verified:
-                messages.error(request, "Your account is waiting for admin approval")
-                return redirect('login')
 
             login(request, user)
 
@@ -106,16 +73,6 @@ def signup(request):
                 first_name=first_name,
                 last_name=last_name
             )
-
-            # ✅ VERY IMPORTANT LINE
-            role = request.POST.get('role')
-
-            user.role = role
-
-            if role in ['admin', 'staff']:
-                user.is_verified = False
-            else:
-                user.is_verified = True
 
             user.save()
 
