@@ -14,4 +14,4 @@ def account_view(request):
         'user': request.user,
     }
 
-    return render(request, 'account.html', context)
+    return render(request, 'user/dashboard.html', context)

@@ -3,22 +3,21 @@ from django.shortcuts import render, redirect
 from django.contrib.auth import logout as auth_logout, authenticate, login, get_user_model
 from django.contrib.auth.forms import AuthenticationForm
 from django.contrib import messages
-from .decorators import role_required
+from authentication.decorators import admin_required, staff_required
 from django.contrib.auth.decorators import login_required
+
+
 @login_required
-@role_required(['admin'])
+@admin_required
 def admin_dashboard(request):
     return render(request, 'admin/dashboard.html')
 
-
 @login_required
-@role_required(['staff'])
+@staff_required
 def staff_dashboard(request):
     return render(request, 'staff/dashboard.html')
 
-
 @login_required
-@role_required(['user'])
 def user_dashboard(request):
     return render(request, 'user/dashboard.html')
 
@@ -32,6 +31,7 @@ def login_view(request):
         user = authenticate(username=username, password=password)
 
         if user:
+
             login(request, user)
 
             # 🔥 Role-based redirect
@@ -55,11 +55,7 @@ def signup(request):
         email = request.POST['email']
         first_name = request.POST['first_name']
         last_name = request.POST['last_name']
-        role = request.POST.get('role')
 
-        if not role:
-            messages.error(request, "Please select a role")
-            return redirect('signup')
 
         user = User.objects.filter(username=username).first()
 
@@ -73,14 +69,11 @@ def signup(request):
                 first_name=first_name,
                 last_name=last_name
             )
-
-            # VERY IMPORTANT LINE
-            user.role = role
             user.save()
 
             login(request, user)
 
-            #  Optional: role-based redirect
+            # Optional: role-based redirect
             if user.role == 'admin':
                 return redirect('admin_dashboard')
             elif user.role == 'staff':
@@ -89,6 +82,7 @@ def signup(request):
                 return redirect('user_dashboard')
 
     return render(request, 'authentication/signup.html')
+
 
 
 def logout_view(request):  # renamed from 'logout'
