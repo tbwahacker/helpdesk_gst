@@ -1,3 +1,5 @@
+
+from django.contrib.auth.decorators import login_required
 from django.shortcuts import render
 
 def index(request):
@@ -5,3 +7,11 @@ def index(request):
 
 def ticket(request):
     return render(request, 'core_business/ticket.html')
+
+@login_required
+def account_view(request):
+    context = {
+        'user': request.user,
+    }
+
+    return render(request, 'account.html', context)

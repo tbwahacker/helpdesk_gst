@@ -1,14 +1,5 @@
-<!DOCTYPE html>
 
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>End User Dashboard</title>
-</head>
-
-<h1>User Dashboard</h1>
-<p><h3>Welcome to your account!{{ request.user.username }}</h3>></p>
-
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -40,6 +31,13 @@
 
     <!-- Main Content -->
     <div class="col-md-10 p-4">
+
+      <!-- User Info -->
+      <div class="mb-4">
+        <h3>Welcome to Your Account, {{ user.username }}!</h3>
+        <p><strong>Email:</strong> {{ user.email }}</p>
+        <p><strong>Full Name:</strong> {{ user.get_full_name|default:"Not provided" }}</p>
+      </div>
 
       <!-- Dashboard Cards -->
       <div class="row mb-4">
@@ -104,8 +102,6 @@
   </div>
 </div>
 
-<body>
-<h1>User Dashboard</h1>
-<p>Welcome {{ request.user.username }}</p>
+
 </body>
 </html>
