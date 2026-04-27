@@ -34,10 +34,10 @@ def login_view(request):
 
             login(request, user)
 
-            # 🔥 Role-based redirect
-            if user.role == 'admin':
+            #  Role-based redirect
+            if user.is_superuser:
                 return redirect('admin_dashboard')
-            elif user.role == 'staff':
+            elif user.is_staff:
                 return redirect('staff_dashboard')
             else:
                 return redirect('user_dashboard')
