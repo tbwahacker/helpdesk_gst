@@ -29,3 +29,5 @@ git pull origin ur branch
 
 # how to migrate
 py manage.py makemigrations
+py manage.py migrate
+

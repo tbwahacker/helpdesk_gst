@@ -1,39 +1,24 @@
-
-from django.shortcuts import render, redirect
-from django.contrib.auth import logout as auth_logout, authenticate, login, get_user_model
-from django.contrib import messages
-
-def admin_dashboard(request):
-    return render(request, 'admin/dashboard.html')
-
-def staff_dashboard(request):
-    return render(request, 'staff/dashboard.html')
-
-def user_dashboard(request):
-    return render(request, 'user/dashboard.html')
-
-User = get_user_model()
-=======
 # authentication/views.py
 from django.shortcuts import render, redirect
 from django.contrib.auth import logout as auth_logout, authenticate, login, get_user_model
 from django.contrib.auth.forms import AuthenticationForm
 from django.contrib import messages
-from authentication.decorators import admin_required, staff_required
+from .decorators import role_required
 from django.contrib.auth.decorators import login_required
-
-
 @login_required
-@admin_required
+@role_required(['admin'])
 def admin_dashboard(request):
     return render(request, 'admin/dashboard.html')
 
+
 @login_required
-@staff_required
+@role_required(['staff'])
 def staff_dashboard(request):
     return render(request, 'staff/dashboard.html')
 
+
 @login_required
+@role_required(['user'])
 def user_dashboard(request):
     return render(request, 'user/dashboard.html')
 
@@ -42,28 +27,11 @@ User=get_user_model()
 def login_view(request):
     if request.method == 'POST':
 
-
-        username = request.POST.get('username')
-        password = request.POST.get('password')
-
-        user = authenticate(request, username=username, password=password)
-
-        if user:
-            login(request, user)
-
-            # Role-based redirect using Django built-in fields
-            if user.is_superuser:
-                return redirect('admin_dashboard')
-
-            elif user.is_staff:
-                return redirect('staff_dashboard')
-
         username = request.POST['username']
         password = request.POST['password']
         user = authenticate(username=username, password=password)
 
         if user:
-
             login(request, user)
 
             # 🔥 Role-based redirect
@@ -71,7 +39,6 @@ def login_view(request):
                 return redirect('admin_dashboard')
             elif user.role == 'staff':
                 return redirect('staff_dashboard')
-
             else:
                 return redirect('user_dashboard')
 
@@ -83,14 +50,6 @@ def login_view(request):
 
 def signup(request):
     if request.method == 'POST':
-
-
-        username = request.POST.get('username')
-        password = request.POST.get('password')
-        email = request.POST.get('email')
-        first_name = request.POST.get('first_name')
-        last_name = request.POST.get('last_name')
-
         username = request.POST['username']
         password = request.POST['password']
         email = request.POST['email']
@@ -102,12 +61,10 @@ def signup(request):
             messages.error(request, "Please select a role")
             return redirect('signup')
 
-
         user = User.objects.filter(username=username).first()
 
         if user:
             messages.error(request, "User already exists")
-
         else:
             user = User.objects.create_user(
                 username=username,
@@ -117,17 +74,13 @@ def signup(request):
                 last_name=last_name
             )
 
-
-            login(request, user)
-
-            # New users go to user dashboard
-            return redirect('user_dashboard')
-
+            # VERY IMPORTANT LINE
+            user.role = role
             user.save()
 
             login(request, user)
 
-            # ✅ Optional: role-based redirect
+            #  Optional: role-based redirect
             if user.role == 'admin':
                 return redirect('admin_dashboard')
             elif user.role == 'staff':
@@ -135,14 +88,7 @@ def signup(request):
             else:
                 return redirect('user_dashboard')
 
-
     return render(request, 'authentication/signup.html')
-
-
-
-def logout_view(request):
-    auth_logout(request)
-    return redirect('login')
 
 
 def logout_view(request):  # renamed from 'logout'
