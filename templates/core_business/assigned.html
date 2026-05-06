@@ -1,0 +1,98 @@
+<div class="card p-3 shadow-sm">
+    <style>
+  .dashboard-card {
+    border-radius: 15px;
+    background: #ffffff;
+  }
+
+  .table thead {
+    background-color: #f8f9fa;
+  }
+
+  .table-hover tbody tr:hover {
+    background-color: #f1f5ff;
+    transition: 0.2s;
+  }
+
+  .badge {
+    padding: 6px 10px;
+    font-size: 12px;
+    border-radius: 20px;
+  }
+
+  .btn-action {
+    border-radius: 20px;
+    padding: 4px 10px;
+    font-size: 12px;
+  }
+
+  .card-title {
+    font-weight: 600;
+  }
+</style>
+  <h5>My Assigned Tickets</h5>
+
+  <table class="table table-striped">
+    <thead>
+      <tr>
+        <th>#</th>
+        <th>User</th>
+        <th>Subject</th>
+        <th>Priority</th>
+        <th>Status</th>
+        <th>Date</th>
+        <th>Action</th>
+      </tr>
+    </thead>
+
+    <tbody>
+      {% for ticket in tickets %}
+      <tr>
+        <td>{{ forloop.counter }}</td>
+        <td>{{ ticket.user.username }}</td>
+        <td>{{ ticket.subject }}</td>
+
+        <!-- Priority badge -->
+        <td>
+          {% if ticket.priority == 'High' %}
+            <span class="badge bg-danger">High</span>
+          {% elif ticket.priority == 'Medium' %}
+            <span class="badge bg-warning">Medium</span>
+          {% else %}
+            <span class="badge bg-secondary">Low</span>
+          {% endif %}
+        </td>
+
+        <!-- Status badge -->
+        <td>
+          {% if ticket.status == 'Open' %}
+            <span class="badge bg-warning">Open</span>
+          {% elif ticket.status == 'Resolved' %}
+            <span class="badge bg-success">Resolved</span>
+          {% else %}
+            <span class="badge bg-info">{{ ticket.status }}</span>
+          {% endif %}
+        </td>
+
+        <td>{{ ticket.created_at|date:"Y-m-d" }}</td>
+
+        <!-- Actions -->
+        <td>
+          <a href="{% url 'ticket_detail' ticket.id %}" class="btn btn-sm btn-primary">View</a>
+
+          <a href="{% url 'resolve_ticket' ticket.id %}" class="btn btn-sm btn-success">
+            Resolve
+          </a>
+        </td>
+      </tr>
+
+      {% empty %}
+      <tr>
+        <td colspan="7" class="text-center text-muted">
+          No tickets assigned to you
+        </td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
