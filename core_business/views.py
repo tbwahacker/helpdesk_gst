@@ -7,7 +7,6 @@ from .models import Ticket
 def index(request):
     return render(request, 'index.html')
 
-
 @login_required
 def ticket(request):
     if request.method == 'POST':
@@ -43,3 +42,6 @@ def account_view(request):
         'open_tickets': open_tickets,
         'resolved_tickets': resolved_tickets
     })
+
+def assigned_view(request):
+    return render(request, 'core_business/assigned.html')

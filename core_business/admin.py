@@ -7,8 +7,8 @@ from .models import User, Category, Ticket, Comment, Attachment, Report, Knowled
 # -------------------------
 @admin.register(User)
 class UserAdmin(admin.ModelAdmin):
-    list_display = ('username', 'email', 'role')
-    list_filter = ('role',)
+    list_display = ('username', 'email')
+
 
 
 # -------------------------

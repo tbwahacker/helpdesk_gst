@@ -1,12 +1,116 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Staff Dashboard</title>
-</head>
-<body>
-<h1>Staff Dashboard</h1>
-<p><h3>Welcome to your account! {{ request.user.username }}</h3></p>
+{% extends 'base.html' %}
 
-</body>
-</html>
+{% block content %}
+<div class="container-fluid">
+  <div class="row">
+
+    <!-- Sidebar -->
+    <div class="col-md-2 bg-dark text-white p-3" style="height:100vh;">
+      <h4>Staff Panel</h4>
+      <hr>
+      <a href="#" class="text-white d-block p-2">Dashboard</a>
+      <a href="#" class="text-white d-block p-2">All Tickets</a>
+      <a href="{% url 'assigned' %}" class="text-white d-block p-2">Assigned</a>
+      <a href="#" class="text-white d-block p-2">Users</a>
+      <a href="{% url 'logout' %}" class="text-white d-block p-2">Logout</a>
+    </div>
+
+    <!-- Main Content -->
+    <div class="col-md-10 p-4">
+
+      <h3 class="mb-4">Welcome, {{ user.username }}</h3>
+
+      <!-- Stats -->
+      <div class="row mb-4">
+        <div class="col-md-3">
+          <div class="card p-3 shadow-sm">
+            <h6>Total</h6>
+            <h3 id="totalCount">0</h3>
+          </div>
+        </div>
+        <div class="col-md-3">
+          <div class="card p-3 shadow-sm">
+            <h6>Open</h6>
+            <h3 id="openCount">0</h3>
+          </div>
+        </div>
+        <div class="col-md-3">
+          <div class="card p-3 shadow-sm">
+            <h6>Resolved</h6>
+            <h3 id="resolvedCount">0</h3>
+          </div>
+        </div>
+      </div>
+
+      <!-- Ticket Table -->
+      <div class="card p-3 shadow-sm">
+        <h5>Manage Tickets</h5>
+        <table class="table table-bordered" id="ticketTable">
+          <thead>
+            <tr>
+              <th>#</th>
+              <th>User</th>
+              <th>Subject</th>
+              <th>Status</th>
+              <th>Action</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for ticket in tickets %}
+            <tr>
+              <td>{{ forloop.counter }}</td>
+              <td>{{ ticket.user.username }}</td>
+              <td>{{ ticket.subject }}</td>
+              <td class="status">{{ ticket.status }}</td>
+              <td>
+                <button class="btn btn-sm btn-success resolveBtn">Resolve</button>
+                <button class="btn btn-sm btn-danger deleteBtn">Delete</button>
+              </td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<!-- JavaScript for Interactivity -->
+<script>
+function updateCounts() {
+    let rows = document.querySelectorAll('#ticketTable tbody tr');
+    let total = rows.length;
+    let open = 0;
+    let resolved = 0;
+
+    rows.forEach(row => {
+        let status = row.querySelector('.status').innerText;
+        if (status === 'Open') open++;
+        if (status === 'Resolved') resolved++;
+    });
+
+    document.getElementById('totalCount').innerText = total;
+    document.getElementById('openCount').innerText = open;
+    document.getElementById('resolvedCount').innerText = resolved;
+}
+
+// Resolve ticket
+ document.addEventListener('click', function(e) {
+    if (e.target.classList.contains('resolveBtn')) {
+        let row = e.target.closest('tr');
+        row.querySelector('.status').innerText = 'Resolved';
+        updateCounts();
+    }
+
+    if (e.target.classList.contains('deleteBtn')) {
+        e.target.closest('tr').remove();
+        updateCounts();
+    }
+});
+
+// Initialize counts
+updateCounts();
+</script>
+
+{% endblock %}
