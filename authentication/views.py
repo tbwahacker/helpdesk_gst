@@ -9,6 +9,8 @@ from authentication.decorators import admin_required, staff_required
 from django.contrib.auth.decorators import login_required
 from core_business.models import Ticket
 
+from core_business.models import Ticket
+
 
 @login_required
 @admin_required
