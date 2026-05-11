@@ -29,19 +29,39 @@ def ticket(request):
 
 @login_required
 def account_view(request):
-    tickets = Ticket.objects.filter(user=request.user).order_by('-created_at')
 
-    total_tickets = tickets.count()
-    open_tickets = tickets.filter(status='open').count()
-    resolved_tickets = tickets.filter(status='resolved').count()
+    # STAFF DASHBOARD
+    if request.user.is_staff:
 
-    return render(request, 'user/dashboard.html', {
-        'user': request.user,
-        'tickets': tickets,
-        'total_tickets': total_tickets,
-        'open_tickets': open_tickets,
-        'resolved_tickets': resolved_tickets
-    })
+        tickets = Ticket.objects.filter(
+            assigned_to=request.user
+        ).order_by('-created_at')
 
-def assigned_view(request):
-    return render(request, 'core_business/assigned.html')
+        total_tickets = tickets.count()
+        open_tickets = tickets.filter(status='open').count()
+        resolved_tickets = tickets.filter(status='resolved').count()
+
+        return render(request, 'staff/dashboard.html', {
+            'tickets': tickets,
+            'total_tickets': total_tickets,
+            'open_tickets': open_tickets,
+            'resolved_tickets': resolved_tickets
+        })
+
+    # NORMAL USER DASHBOARD
+    else:
+
+        tickets = Ticket.objects.filter(
+            user=request.user
+        ).order_by('-created_at')
+
+        total_tickets = tickets.count()
+        open_tickets = tickets.filter(status='open').count()
+        resolved_tickets = tickets.filter(status='resolved').count()
+
+        return render(request, 'user/dashboard.html', {
+            'tickets': tickets,
+            'total_tickets': total_tickets,
+            'open_tickets': open_tickets,
+            'resolved_tickets': resolved_tickets
+        })

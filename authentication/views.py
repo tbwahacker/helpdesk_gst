@@ -7,6 +7,7 @@ from django.contrib.auth.forms import AuthenticationForm
 from django.contrib import messages
 from authentication.decorators import admin_required, staff_required
 from django.contrib.auth.decorators import login_required
+from core_business.models import Ticket
 
 from core_business.models import Ticket
 
