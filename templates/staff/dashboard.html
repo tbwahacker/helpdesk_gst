@@ -9,15 +9,14 @@
       <h4>Staff Panel</h4>
       <hr>
       <a href="#" class="text-white d-block p-2">Dashboard</a>
-      <a href="#" class="text-white d-block p-2">All Tickets</a>
-        <a href="{% url 'account' %}" class="text-white d-block p-2">Assigned</a>
+        <a href="{% url 'account' %}" class="text-white d-block p-2">Assigned tickets</a>
       <a href="{% url 'logout' %}" class="text-white d-block p-2">Logout</a>
     </div>
 
     <!-- Main Content -->
     <div class="col-md-10 p-4">
 
-      <h3 class="mb-4">Welcome, {{ user.username }}</h3>
+      <h3 class="mb-4">Welcome,  {{ user.username }}</h3>
 
       <!-- Stats -->
       <div class="row mb-4">
