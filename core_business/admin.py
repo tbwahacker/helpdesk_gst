@@ -1,5 +1,12 @@
 from django.contrib import admin
-from .models import User, Category, Ticket, Comment, Attachment, Report, KnowledgeBase
+from .models import Department, User, Category, Ticket, Comment, Attachment, Report, KnowledgeBase
+
+# -------------------------
+# Department Admin
+# -------------------------
+@admin.register(Department)
+class DepartmentAdmin(admin.ModelAdmin):
+    list_display = ('name',)
 
 
 # -------------------------
@@ -7,7 +14,7 @@ from .models import User, Category, Ticket, Comment, Attachment, Report, Knowled
 # -------------------------
 @admin.register(User)
 class UserAdmin(admin.ModelAdmin):
-    list_display = ('username', 'email')
+    list_display = ('username', 'email', 'department')
 
 
 
