@@ -6,6 +6,13 @@
   <div class="row">
 
     <!-- Sidebar -->
+    <div class="col-md-2 bg-dark text-white p-3" style="height:100vh;">
+      <h4>Staff Panel</h4>
+      <hr>
+      <a href="#" class="text-white d-block p-2">Dashboard</a>
+        <a href="{% url 'account' %}" class="text-white d-block p-2">Assigned tickets</a>
+      <a href="{% url 'logout' %}" class="text-white d-block p-2">Logout</a>
+
     <div class="col-md-2 bg-dark text-white p-3" style="min-height: 100vh;">
       <h4 class="mb-4">Staff Panel</h4>
 
@@ -20,11 +27,14 @@
       <a href="{% url 'logout' %}" class="text-white d-block p-2 text-decoration-none">
         Logout
       </a>
+
     </div>
 
     <!-- Main Content -->
     <div class="col-md-10 p-4">
 
+
+      <h3 class="mb-4">Welcome,  {{ user.username }}</h3>
       <h3 class="mb-4">
         Welcome, {{ user.username }}
       </h3>
