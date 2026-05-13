@@ -1,15 +1,20 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from .models import Ticket
 
 
+# HOME PAGE
 def index(request):
     return render(request, 'index.html')
 
+
+# CREATE TICKET
 @login_required
 def ticket(request):
+
     if request.method == 'POST':
+
         title = request.POST.get('issue')
         description = request.POST.get('description')
         priority = request.POST.get('priority')
@@ -22,11 +27,13 @@ def ticket(request):
         )
 
         messages.success(request, "Ticket submitted successfully!")
+
         return redirect('account')
 
     return render(request, 'core_business/ticket.html')
 
 
+# USER + STAFF DASHBOARD
 @login_required
 def account_view(request):
 
@@ -65,3 +72,20 @@ def account_view(request):
             'open_tickets': open_tickets,
             'resolved_tickets': resolved_tickets
         })
+
+
+# RESOLVE TICKET
+@login_required
+def resolve_ticket(request, ticket_id):
+
+    ticket = get_object_or_404(Ticket, id=ticket_id)
+
+    # Only assigned staff can resolve
+    if request.user == ticket.assigned_to:
+
+        ticket.status = 'resolved'
+        ticket.save()
+
+        messages.success(request, 'Ticket resolved successfully.')
+
+    return redirect('account')
