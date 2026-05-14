@@ -6,5 +6,5 @@ urlpatterns = [
     path('', views.index, name='index'),
     path('ticket', views.ticket, name='ticket'),
     path('account/', views.account_view, name='account'),
-    path('assigned/', views.assigned_view, name='assigned')
+path('resolve/<int:ticket_id>/', views.resolve_ticket, name='resolve_ticket'),
 ]

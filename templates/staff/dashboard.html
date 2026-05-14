@@ -1,116 +1,175 @@
 {% extends 'base.html' %}
 
 {% block content %}
+
 <div class="container-fluid">
   <div class="row">
 
     <!-- Sidebar -->
-    <div class="col-md-2 bg-dark text-white p-3" style="height:100vh;">
-      <h4>Staff Panel</h4>
-      <hr>
-      <a href="#" class="text-white d-block p-2">Dashboard</a>
-      <a href="#" class="text-white d-block p-2">All Tickets</a>
-      <a href="{% url 'assigned' %}" class="text-white d-block p-2">Assigned</a>
-      <a href="#" class="text-white d-block p-2">Users</a>
-      <a href="{% url 'logout' %}" class="text-white d-block p-2">Logout</a>
+    <div class="col-md-2 bg-dark text-white p-3" style="min-height: 100vh;">
+      <h4 class="mb-4">Staff Panel</h4>
+
+      <a href="{% url 'account' %}" class="text-white d-block p-2 text-decoration-none">
+        Dashboard
+      </a>
+
+      <a href="{% url 'account' %}" class="text-white d-block p-2 text-decoration-none">
+        Assigned Tickets
+      </a>
+
+      <a href="{% url 'logout' %}" class="text-white d-block p-2 text-decoration-none">
+        Logout
+      </a>
     </div>
 
     <!-- Main Content -->
     <div class="col-md-10 p-4">
 
-      <h3 class="mb-4">Welcome, {{ user.username }}</h3>
+      <h3 class="mb-4">
+        Welcome, {{ user.username }}
+      </h3>
 
-      <!-- Stats -->
+      <!-- Statistics -->
       <div class="row mb-4">
-        <div class="col-md-3">
-          <div class="card p-3 shadow-sm">
-            <h6>Total</h6>
-            <h3 id="totalCount">0</h3>
+
+        <div class="col-md-4">
+          <div class="card shadow-sm border-0 p-3">
+            <h6 class="text-muted">Total Tickets</h6>
+            <h2>{{ total_tickets }}</h2>
           </div>
         </div>
-        <div class="col-md-3">
-          <div class="card p-3 shadow-sm">
-            <h6>Open</h6>
-            <h3 id="openCount">0</h3>
+
+        <div class="col-md-4">
+          <div class="card shadow-sm border-0 p-3">
+            <h6 class="text-muted">Open Tickets</h6>
+            <h2>{{ open_tickets }}</h2>
           </div>
         </div>
-        <div class="col-md-3">
-          <div class="card p-3 shadow-sm">
-            <h6>Resolved</h6>
-            <h3 id="resolvedCount">0</h3>
+
+        <div class="col-md-4">
+          <div class="card shadow-sm border-0 p-3">
+            <h6 class="text-muted">Resolved Tickets</h6>
+            <h2>{{ resolved_tickets }}</h2>
           </div>
         </div>
+
       </div>
 
       <!-- Ticket Table -->
-      <div class="card p-3 shadow-sm">
-        <h5>Manage Tickets</h5>
-        <table class="table table-bordered" id="ticketTable">
-          <thead>
-            <tr>
-              <th>#</th>
-              <th>User</th>
-              <th>Subject</th>
-              <th>Status</th>
-              <th>Action</th>
-            </tr>
-          </thead>
-          <tbody>
-            {% for ticket in tickets %}
-            <tr>
-              <td>{{ forloop.counter }}</td>
-              <td>{{ ticket.user.username }}</td>
-              <td>{{ ticket.subject }}</td>
-              <td class="status">{{ ticket.status }}</td>
-              <td>
-                <button class="btn btn-sm btn-success resolveBtn">Resolve</button>
-                <button class="btn btn-sm btn-danger deleteBtn">Delete</button>
-              </td>
-            </tr>
-            {% endfor %}
-          </tbody>
-        </table>
+      <div class="card shadow-sm border-0 p-3">
+
+        <div class="d-flex justify-content-between align-items-center mb-3">
+          <h5>Assigned Tickets</h5>
+        </div>
+
+        <div class="table-responsive">
+
+          <table class="table table-hover align-middle">
+
+            <thead class="table-dark">
+              <tr>
+                <th>#</th>
+                <th>User</th>
+                <th>Subject</th>
+                <th>Priority</th>
+                <th>Status</th>
+                <th>Date</th>
+                <th>Action</th>
+              </tr>
+            </thead>
+
+            <tbody>
+
+              {% for ticket in tickets %}
+              <tr>
+
+                <td>{{ forloop.counter }}</td>
+
+                <td>
+                  {{ ticket.user.username }}
+                </td>
+
+                <td>
+                  {{ ticket.title }}
+                </td>
+
+                <!-- Priority -->
+                <td>
+                  {% if ticket.priority == 'High' %}
+                    <span class="badge bg-danger">
+                      High
+                    </span>
+
+                  {% elif ticket.priority == 'Medium' %}
+                    <span class="badge bg-warning text-dark">
+                      Medium
+                    </span>
+
+                  {% else %}
+                    <span class="badge bg-secondary">
+                      Low
+                    </span>
+                  {% endif %}
+                </td>
+
+                <!-- Status -->
+                <td>
+
+                  {% if ticket.status == 'resolved' %}
+                    <span class="badge bg-success">
+                      Resolved
+                    </span>
+
+                  {% else %}
+                    <span class="badge bg-warning text-dark">
+                      Open
+                    </span>
+                  {% endif %}
+
+                </td>
+
+                <!-- Date -->
+                <td>
+                  {{ ticket.created_at|date:"M d, Y" }}
+                </td>
+
+                <!-- Action -->
+                <td>
+
+                  {% if ticket.status != 'resolved' %}
+                  <a href="{% url 'resolve_ticket' ticket.id %}"
+                     class="btn btn-success btn-sm">
+                     Resolve
+                  </a>
+                  {% else %}
+                  <button class="btn btn-secondary btn-sm" disabled>
+                    Resolved
+                  </button>
+                  {% endif %}
+
+                </td>
+
+              </tr>
+
+              {% empty %}
+              <tr>
+                <td colspan="7" class="text-center text-muted py-4">
+                  No assigned tickets found
+                </td>
+              </tr>
+              {% endfor %}
+
+            </tbody>
+
+          </table>
+
+        </div>
+
       </div>
 
     </div>
+
   </div>
 </div>
-
-<!-- JavaScript for Interactivity -->
-<script>
-function updateCounts() {
-    let rows = document.querySelectorAll('#ticketTable tbody tr');
-    let total = rows.length;
-    let open = 0;
-    let resolved = 0;
-
-    rows.forEach(row => {
-        let status = row.querySelector('.status').innerText;
-        if (status === 'Open') open++;
-        if (status === 'Resolved') resolved++;
-    });
-
-    document.getElementById('totalCount').innerText = total;
-    document.getElementById('openCount').innerText = open;
-    document.getElementById('resolvedCount').innerText = resolved;
-}
-
-// Resolve ticket
- document.addEventListener('click', function(e) {
-    if (e.target.classList.contains('resolveBtn')) {
-        let row = e.target.closest('tr');
-        row.querySelector('.status').innerText = 'Resolved';
-        updateCounts();
-    }
-
-    if (e.target.classList.contains('deleteBtn')) {
-        e.target.closest('tr').remove();
-        updateCounts();
-    }
-});
-
-// Initialize counts
-updateCounts();
-</script>
 
 {% endblock %}
